@@ -1,0 +1,31 @@
+﻿//////////////////////////////////////
+//  カーネル宣言
+//////////////////////////////////////
+// 加算
+#pragma kernel Sum
+// 減算
+//#pragma kernel Sub  
+
+//////////////////////////////////////
+//  バッファ宣言
+//////////////////////////////////////
+// 保存バッファ
+RWStructuredBuffer<int> buffer;
+// 右辺値
+int r;
+// 左辺値
+int l;
+
+[numthreads(4,1,1)]
+//デフォ
+// void Sum(uint3 groupID:SV_GROUPID,
+// uint3 groupThreadID:SV_GROUPTHREADID)
+// {
+//     buffer[groupID.x]=r+l;
+// }
+
+//編集
+void Sum(uint3 id:SV_DISPATCHTHREADID)
+{
+    buffer[id.x]=r+l;
+}
