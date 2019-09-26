@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Test.cs" />
+    <Compile Include="Assets\Scripts\TextureSample.cs" />
     <None Include="Assets\Shaders\Math.compute" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/yuuki/Documents/Develop/ComputeShader-Project/ComputeShaderProject/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
