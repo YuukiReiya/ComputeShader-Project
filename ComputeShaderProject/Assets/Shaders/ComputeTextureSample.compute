@@ -1,0 +1,19 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel Func
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> textureBuffer;
+
+[numthreads(8,8,1)]
+void Func(uint3 thID:SV_GROUPTHREADID, uint3 disID : SV_DispatchThreadID)
+{
+	float w, h;
+	textureBuffer.GetDimensions(w, h);
+	textureBuffer[disID.xy] = float4(
+		1.0f,
+		1.0f,
+		1.0f,
+		(float)1
+		);
+}
