@@ -1,0 +1,12 @@
+﻿#pragma kernel Sample
+RWStructuredBuffer<int> buffer;
+[numthreads(4,4,1)]
+// void Sample (int3 id:SV_GroupThreadID)
+// {
+//     buffer[id.x]=id.x;
+// }
+
+void Sample (int3 id:SV_GroupThreadID,int3 dID:SV_DISPATCHTHREADID)
+{
+    buffer[dID.x]=id.x;
+}
