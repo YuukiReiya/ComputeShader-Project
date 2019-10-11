@@ -6,19 +6,47 @@ using UnityEngine;
 public class TextureSample : MonoBehaviour
 {
     RenderTexture tex;
-    ComputeShader shader;
+    [SerializeField] ComputeShader shader;
+    ComputeBuffer buffer;
+    Renderer renderer;
     int kIndex;//実行するカーネルのインデックス
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        renderer = GetComponent<Renderer>();
+        SetupTexture();
+        SetupComputeShader();
+        GetThreadSize();
+        Execute();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+    }
+
+    void Execute()
+    {
+        //Thead Group
+        int x, y, z;
+        x = tex.width / thSize.x;
+        y = tex.height / thSize.y;
+        z = thSize.z;
+        //実行
+        shader.Dispatch(
+            kIndex,
+            x,
+            y,
+            z
+            );
+
+        Debug.Log("x:" + x);
+        Debug.Log("y:" + y);
+        Debug.Log("z:" + z);
+        buffer.Release();
+        //マテリアル変更
+        renderer.material.mainTexture = tex;
     }
 
     /// <summary>
@@ -32,6 +60,21 @@ public class TextureSample : MonoBehaviour
         //ランダムアクセス書き込みの許可(シェーダーからの書き込み許可):trueにしないと書き込めないはず
         tex.enableRandomWrite = true;
         tex.Create();
+    }
+
+    /// <summary>
+    /// コンピュートシェーダーのセットアップ
+    /// カーネルインデックス等
+    /// </summary>
+    void SetupComputeShader()
+    {
+        //  index
+        kIndex = shader.FindKernel("Func");
+
+        //  buffer
+        buffer = new ComputeBuffer(512 * 512, sizeof(float));
+        shader.SetBuffer(kIndex, "textureBuffer", buffer);
+
     }
 
     //以下 コンピュートシェーダー側のカーネルの使用スレッド数取得関連
